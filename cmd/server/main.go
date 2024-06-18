@@ -1,25 +1,24 @@
 package main
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"log"
 	"news-api/internal/app"
 	"news-api/internal/config"
 	"news-api/internal/database"
 	"news-api/internal/migrations"
-
-	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
 	cfg := config.GetConfig()
-	db := database.DataBase{}
+	db := &database.DataBase{}
 	db.GetStorage(cfg)
-	migrations.Migrations(cfg, db.DB)
+	migrations.Migrations(cfg, db.DB.DB)
 
 	app := &app.App{
 		Config: cfg,
-		DB:     &db,
-		Fiber:  fiber.New(),
+		DB:     db,
+		Echo:   fiber.New(),
 	}
 
 	srv := &app.Server{}
