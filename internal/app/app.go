@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/labstack/echo/v4/middleware"
 	"log"
+	"news-api/internal/models"
 
 	"news-api/internal/config"
 
@@ -22,6 +23,11 @@ type App struct {
 
 type Storage interface {
 	Stop() error
+	GetAllNews() ([]models.News, error)
+	GetNewsByID(int64) (*models.News, error)
+	CreateNews(*models.News) error
+	DeleteNews(int64) error
+	UpdateNews(*models.News) error
 }
 
 func (a *App) Start() error {

@@ -1,2 +1,2 @@
 database:
-  dsn: "host=localhost port=5432 user=olegsemashko password=0000 dbname=NewsDB sslmode=disable"
+  dsn: "user=olegsemashko  dbname=NewsDB sslmode=disable"

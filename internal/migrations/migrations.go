@@ -1,4 +1,4 @@
-package migration
+package migrations
 
 import (
 	"embed"
@@ -9,7 +9,7 @@ import (
 	"news-api/internal/config"
 )
 
-//go:embed migrations/
+//go:embed migrations/20240618160923_create_news_tables.sql
 var embedMigrations embed.FS
 
 func Migrations(cfg *config.Config, db *sql.DB) {

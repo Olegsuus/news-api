@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
+	"news-api/internal/models"
 
 	"database/sql"
 	_ "github.com/lib/pq"
@@ -41,4 +42,46 @@ func (db *DataBase) Stop() error {
 		}
 	}
 	return nil
+}
+
+func (db *DataBase) GetAllNews() ([]models.News, error) {
+	rows, err := db.DB.Query("SELECT id, title, content FROM News")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var newsList []models.News
+	for rows.Next() {
+		var news models.News
+		if err := rows.Scan(&news.ID, &news.Title, &news.Content); err != nil {
+			return nil, err
+		}
+		newsList = append(newsList, news)
+	}
+	return newsList, nil
+}
+
+func (db *DataBase) GetNewsByID(id int64) (*models.News, error) {
+	var news models.News
+	err := db.DB.QueryRow("SELECT id, title, content FROM News WHERE id = $1", id).Scan(&news.ID, &news.Title, &news.Content)
+	if err != nil {
+		return nil, err
+	}
+	return &news, nil
+}
+
+func (db *DataBase) CreateNews(news *models.News) error {
+	_, err := db.DB.Exec("INSERT INTO News (title, content) VALUES ($1, $2)", news.Title, news.Content)
+	return err
+}
+
+func (db *DataBase) UpdateNews(news *models.News) error {
+	_, err := db.DB.Exec("UPDATE News SET title = $1, content = $2 WHERE id = $3", news.Title, news.Content, news.ID)
+	return err
+}
+
+func (db *DataBase) DeleteNews(id int64) error {
+	_, err := db.DB.Exec("DELETE FROM News WHERE id = $1", id)
+	return err
 }

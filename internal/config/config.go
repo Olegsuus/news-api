@@ -12,7 +12,7 @@ type ServerConfig struct {
 type DatabaseConfig struct {
 	Driver   string `yaml:"driver"`
 	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
+	Port     int    `yaml:"port"`
 	User     string `yaml:"user"`
 	Password int    `yaml:"password"`
 	DBName   string `yaml:"dbname"`
