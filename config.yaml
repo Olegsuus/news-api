@@ -1,0 +1,10 @@
+Database:
+  driver: "postgres"
+  host: "localhost"
+  port: 5432
+  user: "olegsemashko"
+  password: 0000
+  dbname: "NewsDB"
+
+Server:
+  port: 8090
