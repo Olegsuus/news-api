@@ -1,26 +1,25 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
+	"log"
+	migration "news-api/internal/migrations"
+
+	"news-api/internal/app"
 	"news-api/internal/config"
 	"news-api/internal/database"
-	"news-api/internal/handlers"
 )
 
 func main() {
-	// Инициализация конфигурации
-	cfg := config.InitConfig()
+	cfg := config.GetConfig()
+	db := database.DataBase{}
+	db.GetStorage(cfg)
+	migration.Migrations(cfg, db.DB)
+	App := app.App{Config: cfg, DB: &db}
 
-	// Инициализация базы данных
-	database.InitDB(cfg)
+	srv := &app.Server{}
+	App.ServerInterface = srv
 
-	// Создание нового Echo инстанса
-	e := echo.New()
-
-	// Регистрация маршрутов
-	e.GET("/news", handlers.ListNewsHandler)
-	e.PUT("/news/:id", handlers.EditNewsHandler)
-
-	// Запуск сервера
-	e.Start(":8090")
+	if err := App.Start(); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

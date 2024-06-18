@@ -23,7 +23,7 @@ type Config struct {
 	Database DatabaseConfig
 }
 
-func InitConfig() *Config {
+func GetConfig() *Config {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")

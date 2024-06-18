@@ -1,3 +1,6 @@
+Server:
+  port: 8082
+
 Database:
   driver: "postgres"
   host: "localhost"
@@ -5,6 +8,3 @@ Database:
   user: "olegsemashko"
   password: 0000
   dbname: "NewsDB"
-
-Server:
-  port: 8090
