@@ -6,14 +6,14 @@ CREATE TABLE IF NOT EXISTS News (
     content TEXT NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS NewsCategories (
-     news_id INT REFERENCES News(id),
-     category_id INT,
-     PRIMARY KEY (news_id, category_id)
+    news_id INT REFERENCES News(id),
+    category_id INT,
+    PRIMARY KEY (news_id, category_id)
 );
 
 -- +goose StatementEnd
+
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE IF EXISTS NewsCategories;

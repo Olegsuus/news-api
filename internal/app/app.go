@@ -2,16 +2,13 @@ package app
 
 import (
 	"fmt"
-	_ "fmt"
-	"github.com/labstack/echo/v4/middleware"
-	_ "github.com/labstack/echo/v4/middleware"
 	"log"
-	"news-api/internal/models"
 
 	"news-api/internal/config"
+	"news-api/internal/models"
 
 	"github.com/labstack/echo/v4"
-	_ "news-api/internal/models"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type App struct {
@@ -23,11 +20,17 @@ type App struct {
 
 type Storage interface {
 	Stop() error
-	GetAllNews() ([]models.News, error)
+	GetAllNewsWithPagination(int, int) ([]models.News, error)
 	GetNewsByID(int64) (*models.News, error)
 	CreateNews(*models.News) error
 	DeleteNews(int64) error
 	UpdateNews(*models.News) error
+	UpdateNewsCategories(int64, []int64) error
+	DeleteCategory(int64) error
+	UpdateCategory(*models.Category) error
+	CreateCategory(*models.Category) error
+	GetCategoryByID(int64) (*models.Category, error)
+	GetAllCategories() ([]models.Category, error)
 }
 
 func (a *App) Start() error {

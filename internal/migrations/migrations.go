@@ -9,7 +9,7 @@ import (
 	"news-api/internal/config"
 )
 
-//go:embed migrations/20240618160923_create_news_tables.sql
+//go:embed migrations/*.sql
 var embedMigrations embed.FS
 
 func Migrations(cfg *config.Config, db *sql.DB) {
@@ -20,7 +20,11 @@ func Migrations(cfg *config.Config, db *sql.DB) {
 		log.Fatalf("Failed to set goose dialect: %v", err)
 	}
 
+	log.Println("Running migrations...")
+
 	if err := goose.Up(db, "migrations"); err != nil {
 		log.Fatalf("Failed to apply migrations: %v", err)
 	}
+
+	log.Println("Migrations applied successfully!")
 }
