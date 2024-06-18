@@ -5,32 +5,37 @@ import (
 	"log"
 )
 
-type Config struct {
-	Database struct {
-		Driver   string
-		Host     string
-		Port     string
-		User     string
-		Password int
-		DBName   string
-	}
-
-	Server struct {
-		Port int
-	}
+type ServerConfig struct {
+	Port int `yaml:"port"`
 }
 
-var Cfg Config
+type DatabaseConfig struct {
+	Driver   string `yaml:"driver"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	User     string `yaml:"user"`
+	Password int    `yaml:"password"`
+	DBName   string `yaml:"dbname"`
+}
 
-func initConfig() {
+type Config struct {
+	Server   ServerConfig
+	Database DatabaseConfig
+}
+
+func InitConfig() *Config {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
+
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file: %s\n", err)
 	}
 
-	if err := viper.Unmarshal(&Cfg); err != nil {
+	var cfg Config
+	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Fatalf("Unable to decode into struct, %v\n", err)
 	}
+
+	return &cfg
 }

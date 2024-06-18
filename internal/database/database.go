@@ -2,7 +2,9 @@ package database
 
 import (
 	"database/sql"
+	_ "github.com/lib/pq"
 	"log"
+	"news-api/internal/config"
 
 	"github.com/spf13/viper"
 	"gopkg.in/reform.v1"
@@ -11,7 +13,7 @@ import (
 
 var DB *reform.DB
 
-func InitDB() {
+func InitDB(v *config.Config) {
 	dsn := viper.GetString("database.dsn")
 	sqlDB, err := sql.Open("postgres", dsn)
 	if err != nil {
