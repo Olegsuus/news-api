@@ -11,9 +11,10 @@ import (
 
 func main() {
 	cfg := config.GetConfig()
-	db := &database.DataBase{}
-	db.GetStorage(cfg)
-	migrations.Migrations(cfg, db.DB.DB)
+	db := database.NewDB(cfg)
+	defer db.Close()
+
+	migrations.MigrateUp(db.DB)
 
 	app := &app.App{
 		Config: cfg,

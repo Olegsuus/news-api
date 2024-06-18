@@ -6,16 +6,26 @@ import (
 	"strconv"
 )
 
-// HandleGetAllNews обработчик для получения всех новостей
 func (a *App) HandleGetAllNews(c *fiber.Ctx) error {
-	newsList, err := a.DB.GetAllNews()
+	page, err := strconv.Atoi(c.Query("page", "1"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	limit, err := strconv.Atoi(c.Query("limit", "10"))
+	if err != nil || limit < 1 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
+	newsList, err := a.DB.GetAllNews(limit, offset)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to fetch news"})
 	}
-	return c.JSON(fiber.Map{"success": true, "news": newsList})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"success": true, "news": newsList})
 }
 
-// HandleGetNewsByID обработчик для получения новости по id
 func (a *App) HandleGetNewsByID(c *fiber.Ctx) error {
 	id, err := strconv.ParseInt(c.Params("id"), 10, 64)
 	if err != nil {
@@ -25,10 +35,9 @@ func (a *App) HandleGetNewsByID(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "news not found"})
 	}
-	return c.JSON(news)
+	return c.Status(fiber.StatusOK).JSON(news)
 }
 
-// HandleCreateNews обработчик для создания новостей
 func (a *App) HandleCreateNews(c *fiber.Ctx) error {
 	var news models.News
 	if err := c.BodyParser(&news); err != nil {
@@ -40,7 +49,6 @@ func (a *App) HandleCreateNews(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(news)
 }
 
-// HandleUpdateNews обработчик для обновления новостей
 func (a *App) HandleUpdateNews(c *fiber.Ctx) error {
 	id, err := strconv.ParseInt(c.Params("id"), 10, 64)
 	if err != nil {
@@ -54,10 +62,9 @@ func (a *App) HandleUpdateNews(c *fiber.Ctx) error {
 	if err := a.DB.UpdateNews(&news); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to update news"})
 	}
-	return c.JSON(news)
+	return c.Status(fiber.StatusOK).JSON(news)
 }
 
-// HandleDeleteNews обработчик для удаления новостей
 func (a *App) HandleDeleteNews(c *fiber.Ctx) error {
 	id, err := strconv.ParseInt(c.Params("id"), 10, 64)
 	if err != nil {
@@ -66,5 +73,5 @@ func (a *App) HandleDeleteNews(c *fiber.Ctx) error {
 	if err := a.DB.DeleteNews(id); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to delete news"})
 	}
-	return c.JSON(fiber.Map{"message": "news deleted"})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "news deleted"})
 }

@@ -1,9 +1,5 @@
 package app
 
-type ServerInterface interface {
-	GetServer(*App)
-}
-
 type Server struct{}
 
 func (s *Server) GetServer(app *App) {
