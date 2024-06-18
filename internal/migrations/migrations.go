@@ -1,11 +1,10 @@
 package migrations
 
 import (
-	"embed"
-	"log"
-
 	"database/sql"
+	"embed"
 	"github.com/pressly/goose/v3"
+	"log"
 	"news-api/internal/config"
 )
 
@@ -20,11 +19,9 @@ func Migrations(cfg *config.Config, db *sql.DB) {
 		log.Fatalf("Failed to set goose dialect: %v", err)
 	}
 
-	log.Println("Running migrations...")
-
 	if err := goose.Up(db, "migrations"); err != nil {
 		log.Fatalf("Failed to apply migrations: %v", err)
 	}
 
-	log.Println("Migrations applied successfully!")
+	log.Println("Success migrations")
 }

@@ -12,10 +12,16 @@ CREATE TABLE IF NOT EXISTS NewsCategories (
     PRIMARY KEY (news_id, category_id)
 );
 
+CREATE TABLE IF NOT EXISTS Categories (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(255) NOT NULL
+);
+
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE IF EXISTS NewsCategories;
 DROP TABLE IF EXISTS News;
+DROP TABLE IF EXISTS Categories;
 -- +goose StatementEnd
