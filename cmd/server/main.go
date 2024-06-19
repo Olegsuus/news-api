@@ -11,16 +11,12 @@ import (
 func main() {
 	cfg := config.GetConfig()
 	db := database.NewDB(cfg)
-	migrations.Migrations(cfg, db.DB)
 
 	app := &app.App{
 		Config: cfg,
 		DB:     db,
-		Echo:   fiber.New(),
+		Fiber:  fiber.New(),
 	}
-
-	srv := &app.Server{}
-	app.ServerInterface = srv
 
 	if err := app.Start(); err != nil {
 		log.Fatalf("Failed to start server: %v", err)

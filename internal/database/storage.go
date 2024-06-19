@@ -33,8 +33,20 @@ func (db *DB) Close() error {
 }
 
 func (db *DB) GetAllNews(limit, offset int) ([]models.News, error) {
-	var newsList []models.News
-	err := db.DB.SelectAllFrom(models.NewsTable, "LIMIT ? OFFSET ?", limit, offset, &newsList)
+	var structs []reform.Struct
+	structs, err := db.DB.SelectAllFrom(models.NewsTable, "LIMIT ? OFFSET ?", limit, offset, &structs)
+	if err != nil {
+		return nil, err
+	}
+
+	newsList := make([]models.News, len(structs))
+	for i, s := range structs {
+		if news, ok := s.(*models.News); ok {
+			newsList[i] = *news
+		} else {
+			return nil, fmt.Errorf("unexpected type %T", s)
+		}
+	}
 	return newsList, err
 }
 
