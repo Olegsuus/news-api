@@ -17,10 +17,6 @@ func (*News) String() string {
 }
 
 // Implementing reform.Record interface
-func (n *News) String() string {
-	return "News"
-}
-
 func (n *News) Values() []interface{} {
 	return []interface{}{n.ID, n.Title, n.Content}
 }
@@ -45,10 +41,6 @@ func (*NewsCategory) String() string {
 }
 
 // Implementing reform.Record interface
-func (nc *NewsCategory) String() string {
-	return "NewsCategory"
-}
-
 func (nc *NewsCategory) Values() []interface{} {
 	return []interface{}{nc.NewsID, nc.CategoryID}
 }

@@ -5,12 +5,13 @@ import (
 	"embed"
 	"github.com/pressly/goose/v3"
 	"log"
+	"news-api/internal/config"
 )
 
 //go:embed *.sql
 var embedMigrations embed.FS
 
-func MigrateUp(db *sql.DB) {
+func Migrations(cfg *config.Config, db *sql.DB) {
 	goose.SetBaseFS(embedMigrations)
 
 	if err := goose.SetDialect("postgres"); err != nil {

@@ -3,13 +3,12 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"news-api/internal/config"
-	"news-api/internal/models"
-
 	_ "github.com/lib/pq"
 	"gopkg.in/reform.v1"
 	"gopkg.in/reform.v1/dialects/postgresql"
+	"log"
+	"news-api/internal/config"
+	"news-api/internal/models"
 )
 
 type DB struct {
