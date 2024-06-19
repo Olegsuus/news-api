@@ -1,22 +1,58 @@
 package models
 
-import (
-	"time"
-)
-
+// News представляет структуру новости.
 type News struct {
-	ID        int64     `reform:"id,pk" json:"id"`
-	Title     string    `reform:"title" json:"title"`
-	Content   string    `reform:"content" json:"content"`
-	CreatedAt time.Time `reform:"created_at" json:"created_at"`
-	UpdatedAt time.Time `reform:"updated_at" json:"updated_at"`
+	ID      int64  `reform:"id,pk" json:"id"`
+	Title   string `reform:"title" json:"title"`
+	Content string `reform:"content" json:"content"`
 }
 
-// NewsTable is the reform table identifier for News.
-const NewsTable = "news"
+// Implementing reform.View interface
+func (*News) Schema() string {
+	return "public"
+}
 
-// NewsCategory represents the relationship between news and categories.
+func (*News) String() string {
+	return "News"
+}
+
+// Implementing reform.Record interface
+func (n *News) String() string {
+	return "News"
+}
+
+func (n *News) Values() []interface{} {
+	return []interface{}{n.ID, n.Title, n.Content}
+}
+
+func (n *News) PKPointer() interface{} {
+	return &n.ID
+}
+
+// NewsCategory представляет связь между новостью и категорией.
 type NewsCategory struct {
 	NewsID     int64 `reform:"news_id,pk" json:"news_id"`
 	CategoryID int64 `reform:"category_id,pk" json:"category_id"`
+}
+
+// Implementing reform.View interface
+func (*NewsCategory) Schema() string {
+	return "public"
+}
+
+func (*NewsCategory) String() string {
+	return "NewsCategory"
+}
+
+// Implementing reform.Record interface
+func (nc *NewsCategory) String() string {
+	return "NewsCategory"
+}
+
+func (nc *NewsCategory) Values() []interface{} {
+	return []interface{}{nc.NewsID, nc.CategoryID}
+}
+
+func (nc *NewsCategory) PKPointer() interface{} {
+	return &nc.NewsID
 }

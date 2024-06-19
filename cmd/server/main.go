@@ -6,15 +6,12 @@ import (
 	"news-api/internal/app"
 	"news-api/internal/config"
 	"news-api/internal/database"
-	"news-api/internal/migrations"
 )
 
 func main() {
 	cfg := config.GetConfig()
 	db := database.NewDB(cfg)
-	defer db.Close()
-
-	migrations.MigrateUp(db.DB)
+	migrations.Migrations(cfg, db.DB)
 
 	app := &app.App{
 		Config: cfg,
