@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"news-api/internal/models"
 	"strconv"
@@ -20,6 +21,8 @@ func (a *App) HandleGetAllNews(c *fiber.Ctx) error {
 	offset := (page - 1) * limit
 
 	newsList, err := a.DB.GetAllNews(limit, offset)
+	fmt.Println(newsList)
+
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to fetch news"})
 	}
@@ -74,4 +77,9 @@ func (a *App) HandleDeleteNews(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to delete news"})
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "news deleted"})
+}
+
+func (a *App) CreateNew(c *fiber.Ctx) error {
+	news := models.News{Title: "dfsfs", Content: "fdfs"}
+	return a.DB.CreateNews(&news)
 }

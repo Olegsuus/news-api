@@ -17,10 +17,15 @@ type App struct {
 
 func (a *App) Start() error {
 	a.Fiber.Use(logger.New())
+	a.Fiber.Use(BasicAuthorization)
+
 	a.Fiber.Get("/list", a.HandleGetAllNews)
+
+	a.Fiber.Post("/create", a.CreateNew)
 	a.Fiber.Post("/edit/:id", a.HandleUpdateNews)
 	addr := fmt.Sprintf(":%d", a.Config.Server.Port)
 	log.Printf("Starting server on %s", addr)
+
 	return a.Fiber.Listen(addr)
 }
 
