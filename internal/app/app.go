@@ -23,6 +23,7 @@ func (a *App) Start() error {
 
 	a.Fiber.Post("/create", a.CreateNew)
 	a.Fiber.Post("/edit/:id", a.HandleUpdateNews)
+
 	addr := fmt.Sprintf(":%d", a.Config.Server.Port)
 	log.Printf("Starting server on %s", addr)
 

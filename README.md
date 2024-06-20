@@ -1,89 +1,53 @@
-Написать json REST сервер с двумя ручками:
+News API
+=
 
-POST /edit/:Id - изменение новости по Id
-GET /list - список новостей
-БД - mysql (можно и postgres, мы перешли на него).
+Этот репозиторий содержит API на Go для управления новостными статьями и связанными с ними категориями.
 
-В качестве сервера использовать fiber. Для работы с базой reform.
+Возможности:
+-
+1)Создание, обновление и удаление новостных статей
+2)Присвоение категорий новостным статьям
+3)Поддержка пагинации для списка новостей
+4)Использование фреймворка Fiber для обработки HTTP-запросов
+5)Fiber для работы с базой данных PostgreSQL
 
-Соединение с базой должно использовать connection pool. Все настройки через переменные окружения и/или viper.
+Требования
+-
+1)Go 1.22.2 или новее
+2)PostgreSQL или MySQL
+3)Fiber, Reform
 
-БД:
 
---
--- Структура таблицы `News`
---
+Установка
+-
+1)Клонируйте репозиторий:
+git clone https://github.com/Olegsuus/news-api.git
 
-CREATE TABLE `News` (
-  `Id` bigint NOT NULL,
-  `Title` tinytext NOT NULL,
-  `Content` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
+2)Установите зависимости:
+Настройте подключение к базе данных в файлах config.yaml.
 
---
--- Структура таблицы `NewsCategories`
---
+3)Запустите миграции базы данных:
 
-CREATE TABLE `NewsCategories` (
-  `NewsId` bigint NOT NULL,
-  `CategoryId` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+goose -dir db/migrations postgres "user=yourusername dbname=yourdbname sslmode=disable" up
 
---
--- Индексы сохранённых таблиц
---
+4)Соберите и запустите сервер:
 
---
--- Индексы таблицы `News`
---
-ALTER TABLE `News`
-  ADD PRIMARY KEY (`Id`);
+go build -o server cmd/server/main.go
+./server
+API будет доступно по адресу http://localhost:8080.
 
---
--- Индексы таблицы `NewsCategories`
---
-ALTER TABLE `NewsCategories`
-  ADD PRIMARY KEY (`NewsId`,`CategoryId`);
 
---
--- AUTO_INCREMENT для сохранённых таблиц
---
 
---
--- AUTO_INCREMENT для таблицы `News`
---
-ALTER TABLE `News`
-  MODIFY `Id` bigint NOT NULL AUTO_INCREMENT;
-Т.е. легко видеть, что связка новостей и категорий идёт в отдельной таблице.
+API Эндпоинты
+-
+1)GET /list: Получить список новостей с пагинацией
 
-Формат входных данных для первой ручки:
 
-{
-  "Id": 64,
-  "Title": "Lorem ipsum",
-  "Content": "Dolor sit amet <b>foo</b>",
-  "Categories": [1,2,3]
-}
-При этом, если какое-то из полей не задано - это поле не должно быть обновлено.
+2)POST /edit/:id: Редактировать новость
 
-Формат данных на выходе list:
 
-{
-    "Success": true,
-    "News": [
-      {
-        "Id": 64,
-        "Title": "Lorem ipsum",
-        "Content": "Dolor sit amet <b>foo</b>",
-        "Categories": [1,2,3]
-      },
-      {
-        "Id": 1,
-        "Title": "first",
-        "Content": "tratata",
-        "Categories": [1]
-      }
-    ]
-}
+Пример:
+
+curl -X POST http://localhost:8080/edit/1 -d '{"title": "Новое описание", "content": "Новое содержание статьи", "categories": [1, 2]}'
+
