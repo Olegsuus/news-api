@@ -33,10 +33,6 @@ func (db *DB) Close() error {
 }
 
 func (db *DB) GetAllNews(limit, offset int) ([]models.News, error) {
-	db.CreateNewsCategory(&models.NewsCategory{1, 1})
-	db.CreateNewsCategory(&models.NewsCategory{2, 2})
-	db.CreateNewsCategory(&models.NewsCategory{4, 2})
-
 	var structs []reform.Struct
 
 	query := fmt.Sprintf("LIMIT %d OFFSET %d", limit, offset)
