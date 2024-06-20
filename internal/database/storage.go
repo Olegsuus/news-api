@@ -37,15 +37,16 @@ func (db *DB) GetAllNews(limit, offset int) ([]models.News, error) {
 	query := fmt.Sprintf("LIMIT %d OFFSET %d", limit, offset)
 	structs, err := db.DB.SelectAllFrom(models.NewsTable, query)
 	if err != nil {
-		fmt.Printf("вывод структур: %v\n", err)
 		return nil, err
 	}
-
-	fmt.Printf("вывод структур: %v\n", structs)
 
 	newsList := make([]models.News, len(structs))
 	for i, s := range structs {
 		if news, ok := s.(*models.News); ok {
+			//_, err = db.DB.SelectAllFrom(models.NewsTable, "WHERE news_id = ?", newsID)
+			//if err != nil {
+			//	return nil, err
+			//}
 			newsList[i] = *news
 		} else {
 			return nil, fmt.Errorf("unexpected type %T", s)

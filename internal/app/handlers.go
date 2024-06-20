@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"news-api/internal/models"
 	"strconv"
@@ -21,7 +20,6 @@ func (a *App) HandleGetAllNews(c *fiber.Ctx) error {
 	offset := (page - 1) * limit
 
 	newsList, err := a.DB.GetAllNews(limit, offset)
-	fmt.Println(newsList)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to fetch news"})
