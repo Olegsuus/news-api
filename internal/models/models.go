@@ -15,10 +15,3 @@ type NewsCategory struct {
 	NewsID     int64 `reform:"news_id,pk" json:"news_id"`
 	CategoryID int64 `reform:"category_id" json:"category_id"`
 }
-
-//go:generate reform
-//reform:categories
-type Category struct {
-	ID   int64  `reform:"id,pk" json:"id"`
-	Name string `reform:"name" json:"name"`
-}

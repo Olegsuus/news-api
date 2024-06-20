@@ -91,10 +91,6 @@ func (db *DB) DeleteNews(id int64) error {
 	return db.DB.Delete(news)
 }
 
-func (db *DB) CreateCategory(cat *models.Category) error {
-	return db.DB.Save(cat)
-}
-
 func (db *DB) CreateNewsCategory(nc *models.NewsCategory) error {
 	return db.DB.Save(nc)
 }

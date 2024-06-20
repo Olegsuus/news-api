@@ -1,2 +1,0 @@
-database:
-  dsn: "user=olegsemashko  dbname=NewsDB sslmode=disable"

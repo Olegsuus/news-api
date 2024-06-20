@@ -9,4 +9,5 @@ Database:
   user: "olegsemashko"
   password: "0000"
   dbname: "NewsDB"
+  migrationPath: "migrations"
 

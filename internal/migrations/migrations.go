@@ -14,11 +14,11 @@ var embedMigrations embed.FS
 func Migrations(cfg *config.Config, db *sql.DB) {
 	goose.SetBaseFS(embedMigrations)
 
-	if err := goose.SetDialect("postgres"); err != nil {
+	if err := goose.SetDialect(cfg.Database.Driver); err != nil {
 		log.Fatalf("Failed to set goose dialect: %v", err)
 	}
 
-	if err := goose.Up(db, "migrations"); err != nil {
+	if err := goose.Up(db, cfg.Database.MigrationPath); err != nil {
 		log.Fatalf("Failed to apply migrations: %v", err)
 	}
 

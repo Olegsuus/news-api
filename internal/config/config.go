@@ -11,12 +11,13 @@ type Config struct {
 		Port int
 	}
 	Database struct {
-		Driver   string
-		Host     string
-		Port     int
-		User     string
-		Password string
-		DBName   string
+		Driver        string
+		Host          string
+		Port          int
+		User          string
+		Password      string
+		DBName        string
+		MigrationPath string
 	}
 }
 

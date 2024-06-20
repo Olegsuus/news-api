@@ -59,11 +59,35 @@ func (a *App) HandleUpdateNews(c *fiber.Ctx) error {
 	if err := c.BodyParser(&news); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid input"})
 	}
-	news.ID = id
-	if err := a.DB.UpdateNews(&news); err != nil {
+	if news.ID != id {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid id"})
+	}
+
+	oldNews, err := a.DB.GetNewsByID(id)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "news not found"})
+	}
+
+	updatedNews := mergeNews(*oldNews, news)
+
+	if err := a.DB.UpdateNews(&updatedNews); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to update news"})
 	}
-	return c.Status(fiber.StatusOK).JSON(news)
+	return c.Status(fiber.StatusOK).JSON(updatedNews)
+}
+
+func mergeNews(oldNews models.News, newNews models.News) models.News {
+	if newNews.Title != "" {
+		oldNews.Title = newNews.Title
+	}
+	if newNews.Content != "" {
+		oldNews.Content = newNews.Content
+	}
+	if len(newNews.Categories) > 0 {
+		oldNews.Categories = newNews.Categories
+	}
+
+	return oldNews
 }
 
 func (a *App) HandleDeleteNews(c *fiber.Ctx) error {
