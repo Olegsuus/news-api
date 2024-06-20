@@ -13,7 +13,7 @@ type News struct {
 //reform:newscategories
 type NewsCategory struct {
 	NewsID     int64 `reform:"news_id,pk" json:"news_id"`
-	CategoryID int64 `reform:"category_id " json:"category_id"`
+	CategoryID int64 `reform:"category_id" json:"category_id"`
 }
 
 //go:generate reform

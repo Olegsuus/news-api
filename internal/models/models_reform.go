@@ -155,7 +155,7 @@ func (v *newsCategoryTableType) Name() string {
 func (v *newsCategoryTableType) Columns() []string {
 	return []string{
 		"news_id",
-		"category_id ",
+		"category_id",
 	}
 }
 
@@ -181,7 +181,7 @@ var NewsCategoryTable = &newsCategoryTableType{
 		SQLName: "newscategories",
 		Fields: []parse.FieldInfo{
 			{Name: "NewsID", Type: "int64", Column: "news_id"},
-			{Name: "CategoryID", Type: "int64", Column: "category_id "},
+			{Name: "CategoryID", Type: "int64", Column: "category_id"},
 		},
 		PKFieldIndex: 0,
 	},

@@ -15,7 +15,7 @@ type DB struct {
 	DB *reform.DB
 }
 
-func NewDB(cfg *config.Config) *DB {
+func NewDB(cfg *config.Config) *sql.DB {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		cfg.Database.Host, cfg.Database.Port, cfg.Database.User, cfg.Database.Password, cfg.Database.DBName)
 
@@ -24,6 +24,10 @@ func NewDB(cfg *config.Config) *DB {
 		log.Fatalf("Failed to open database: %v", err)
 	}
 
+	return sqlDB
+}
+
+func CreateReformDB(sqlDB *sql.DB) *DB {
 	db := reform.NewDB(sqlDB, postgresql.Dialect, nil)
 	return &DB{DB: db}
 }
@@ -44,15 +48,14 @@ func (db *DB) GetAllNews(limit, offset int) ([]models.News, error) {
 	newsList := make([]models.News, len(structs))
 	for i, s := range structs {
 		if news, ok := s.(*models.News); ok {
-			var categoryIDs []int64
+			categoryIDs := []int64{}
 			query := fmt.Sprintf("WHERE news_id = %d", news.ID)
 			newsCategoryStructs, err := db.DB.SelectAllFrom(models.NewsCategoryTable, query)
 			if err != nil {
-
-				fmt.Println("newcat =", newsCategoryStructs)
 				log.Printf("Error selecting categories for news ID %d: %v", news.ID, err)
-
+				continue
 			}
+
 			for _, ns := range newsCategoryStructs {
 				if nc, ok := ns.(*models.NewsCategory); ok {
 					categoryIDs = append(categoryIDs, nc.CategoryID)

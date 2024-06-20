@@ -6,15 +6,18 @@ import (
 	"news-api/internal/app"
 	"news-api/internal/config"
 	"news-api/internal/database"
+	"news-api/internal/migrations"
 )
 
 func main() {
 	cfg := config.GetConfig()
 	db := database.NewDB(cfg)
+	migrations.Migrations(cfg, db)
+	reformDB := database.CreateReformDB(db)
 
 	app := &app.App{
 		Config: cfg,
-		DB:     db,
+		DB:     reformDB,
 		Fiber:  fiber.New(),
 	}
 
