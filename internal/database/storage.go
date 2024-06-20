@@ -33,7 +33,12 @@ func (db *DB) Close() error {
 }
 
 func (db *DB) GetAllNews(limit, offset int) ([]models.News, error) {
+	db.CreateNewsCategory(&models.NewsCategory{1, 1})
+	db.CreateNewsCategory(&models.NewsCategory{2, 2})
+	db.CreateNewsCategory(&models.NewsCategory{4, 2})
+
 	var structs []reform.Struct
+
 	query := fmt.Sprintf("LIMIT %d OFFSET %d", limit, offset)
 	structs, err := db.DB.SelectAllFrom(models.NewsTable, query)
 	if err != nil {
@@ -43,10 +48,23 @@ func (db *DB) GetAllNews(limit, offset int) ([]models.News, error) {
 	newsList := make([]models.News, len(structs))
 	for i, s := range structs {
 		if news, ok := s.(*models.News); ok {
-			//_, err = db.DB.SelectAllFrom(models.NewsTable, "WHERE news_id = ?", newsID)
-			//if err != nil {
-			//	return nil, err
-			//}
+			var categoryIDs []int64
+			query := fmt.Sprintf("WHERE news_id = %d", news.ID)
+			newsCategoryStructs, err := db.DB.SelectAllFrom(models.NewsCategoryTable, query)
+			if err != nil {
+
+				fmt.Println("newcat =", newsCategoryStructs)
+				log.Printf("Error selecting categories for news ID %d: %v", news.ID, err)
+
+			}
+			for _, ns := range newsCategoryStructs {
+				if nc, ok := ns.(*models.NewsCategory); ok {
+					categoryIDs = append(categoryIDs, nc.CategoryID)
+				} else {
+					log.Printf("Error parsing category ID for news ID %d: unexpected type %T", news.ID, ns)
+				}
+			}
+			news.Categories = categoryIDs
 			newsList[i] = *news
 		} else {
 			return nil, fmt.Errorf("unexpected type %T", s)
@@ -72,4 +90,12 @@ func (db *DB) UpdateNews(news *models.News) error {
 func (db *DB) DeleteNews(id int64) error {
 	news := &models.News{ID: id}
 	return db.DB.Delete(news)
+}
+
+func (db *DB) CreateCategory(cat *models.Category) error {
+	return db.DB.Save(cat)
+}
+
+func (db *DB) CreateNewsCategory(nc *models.NewsCategory) error {
+	return db.DB.Save(nc)
 }

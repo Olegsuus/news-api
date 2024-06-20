@@ -136,6 +136,250 @@ var (
 	_ fmt.Stringer  = (*News)(nil)
 )
 
+type newsCategoryTableType struct {
+	s parse.StructInfo
+	z []interface{}
+}
+
+// Schema returns a schema name in SQL database ("").
+func (v *newsCategoryTableType) Schema() string {
+	return v.s.SQLSchema
+}
+
+// Name returns a view or table name in SQL database ("newscategories").
+func (v *newsCategoryTableType) Name() string {
+	return v.s.SQLName
+}
+
+// Columns returns a new slice of column names for that view or table in SQL database.
+func (v *newsCategoryTableType) Columns() []string {
+	return []string{
+		"news_id",
+		"category_id ",
+	}
+}
+
+// NewStruct makes a new struct for that view or table.
+func (v *newsCategoryTableType) NewStruct() reform.Struct {
+	return new(NewsCategory)
+}
+
+// NewRecord makes a new record for that table.
+func (v *newsCategoryTableType) NewRecord() reform.Record {
+	return new(NewsCategory)
+}
+
+// PKColumnIndex returns an index of primary key column for that table in SQL database.
+func (v *newsCategoryTableType) PKColumnIndex() uint {
+	return uint(v.s.PKFieldIndex)
+}
+
+// NewsCategoryTable represents newscategories view or table in SQL database.
+var NewsCategoryTable = &newsCategoryTableType{
+	s: parse.StructInfo{
+		Type:    "NewsCategory",
+		SQLName: "newscategories",
+		Fields: []parse.FieldInfo{
+			{Name: "NewsID", Type: "int64", Column: "news_id"},
+			{Name: "CategoryID", Type: "int64", Column: "category_id "},
+		},
+		PKFieldIndex: 0,
+	},
+	z: new(NewsCategory).Values(),
+}
+
+// String returns a string representation of this struct or record.
+func (s NewsCategory) String() string {
+	res := make([]string, 2)
+	res[0] = "NewsID: " + reform.Inspect(s.NewsID, true)
+	res[1] = "CategoryID: " + reform.Inspect(s.CategoryID, true)
+	return strings.Join(res, ", ")
+}
+
+// Values returns a slice of struct or record field values.
+// Returned interface{} values are never untyped nils.
+func (s *NewsCategory) Values() []interface{} {
+	return []interface{}{
+		s.NewsID,
+		s.CategoryID,
+	}
+}
+
+// Pointers returns a slice of pointers to struct or record fields.
+// Returned interface{} values are never untyped nils.
+func (s *NewsCategory) Pointers() []interface{} {
+	return []interface{}{
+		&s.NewsID,
+		&s.CategoryID,
+	}
+}
+
+// View returns View object for that struct.
+func (s *NewsCategory) View() reform.View {
+	return NewsCategoryTable
+}
+
+// Table returns Table object for that record.
+func (s *NewsCategory) Table() reform.Table {
+	return NewsCategoryTable
+}
+
+// PKValue returns a value of primary key for that record.
+// Returned interface{} value is never untyped nil.
+func (s *NewsCategory) PKValue() interface{} {
+	return s.NewsID
+}
+
+// PKPointer returns a pointer to primary key field for that record.
+// Returned interface{} value is never untyped nil.
+func (s *NewsCategory) PKPointer() interface{} {
+	return &s.NewsID
+}
+
+// HasPK returns true if record has non-zero primary key set, false otherwise.
+func (s *NewsCategory) HasPK() bool {
+	return s.NewsID != NewsCategoryTable.z[NewsCategoryTable.s.PKFieldIndex]
+}
+
+// SetPK sets record primary key, if possible.
+//
+// Deprecated: prefer direct field assignment where possible: s.NewsID = pk.
+func (s *NewsCategory) SetPK(pk interface{}) {
+	reform.SetPK(s, pk)
+}
+
+// check interfaces
+var (
+	_ reform.View   = NewsCategoryTable
+	_ reform.Struct = (*NewsCategory)(nil)
+	_ reform.Table  = NewsCategoryTable
+	_ reform.Record = (*NewsCategory)(nil)
+	_ fmt.Stringer  = (*NewsCategory)(nil)
+)
+
+type categoryTableType struct {
+	s parse.StructInfo
+	z []interface{}
+}
+
+// Schema returns a schema name in SQL database ("").
+func (v *categoryTableType) Schema() string {
+	return v.s.SQLSchema
+}
+
+// Name returns a view or table name in SQL database ("categories").
+func (v *categoryTableType) Name() string {
+	return v.s.SQLName
+}
+
+// Columns returns a new slice of column names for that view or table in SQL database.
+func (v *categoryTableType) Columns() []string {
+	return []string{
+		"id",
+		"name",
+	}
+}
+
+// NewStruct makes a new struct for that view or table.
+func (v *categoryTableType) NewStruct() reform.Struct {
+	return new(Category)
+}
+
+// NewRecord makes a new record for that table.
+func (v *categoryTableType) NewRecord() reform.Record {
+	return new(Category)
+}
+
+// PKColumnIndex returns an index of primary key column for that table in SQL database.
+func (v *categoryTableType) PKColumnIndex() uint {
+	return uint(v.s.PKFieldIndex)
+}
+
+// CategoryTable represents categories view or table in SQL database.
+var CategoryTable = &categoryTableType{
+	s: parse.StructInfo{
+		Type:    "Category",
+		SQLName: "categories",
+		Fields: []parse.FieldInfo{
+			{Name: "ID", Type: "int64", Column: "id"},
+			{Name: "Name", Type: "string", Column: "name"},
+		},
+		PKFieldIndex: 0,
+	},
+	z: new(Category).Values(),
+}
+
+// String returns a string representation of this struct or record.
+func (s Category) String() string {
+	res := make([]string, 2)
+	res[0] = "ID: " + reform.Inspect(s.ID, true)
+	res[1] = "Name: " + reform.Inspect(s.Name, true)
+	return strings.Join(res, ", ")
+}
+
+// Values returns a slice of struct or record field values.
+// Returned interface{} values are never untyped nils.
+func (s *Category) Values() []interface{} {
+	return []interface{}{
+		s.ID,
+		s.Name,
+	}
+}
+
+// Pointers returns a slice of pointers to struct or record fields.
+// Returned interface{} values are never untyped nils.
+func (s *Category) Pointers() []interface{} {
+	return []interface{}{
+		&s.ID,
+		&s.Name,
+	}
+}
+
+// View returns View object for that struct.
+func (s *Category) View() reform.View {
+	return CategoryTable
+}
+
+// Table returns Table object for that record.
+func (s *Category) Table() reform.Table {
+	return CategoryTable
+}
+
+// PKValue returns a value of primary key for that record.
+// Returned interface{} value is never untyped nil.
+func (s *Category) PKValue() interface{} {
+	return s.ID
+}
+
+// PKPointer returns a pointer to primary key field for that record.
+// Returned interface{} value is never untyped nil.
+func (s *Category) PKPointer() interface{} {
+	return &s.ID
+}
+
+// HasPK returns true if record has non-zero primary key set, false otherwise.
+func (s *Category) HasPK() bool {
+	return s.ID != CategoryTable.z[CategoryTable.s.PKFieldIndex]
+}
+
+// SetPK sets record primary key, if possible.
+//
+// Deprecated: prefer direct field assignment where possible: s.ID = pk.
+func (s *Category) SetPK(pk interface{}) {
+	reform.SetPK(s, pk)
+}
+
+// check interfaces
+var (
+	_ reform.View   = CategoryTable
+	_ reform.Struct = (*Category)(nil)
+	_ reform.Table  = CategoryTable
+	_ reform.Record = (*Category)(nil)
+	_ fmt.Stringer  = (*Category)(nil)
+)
+
 func init() {
 	parse.AssertUpToDate(&NewsTable.s, new(News))
+	parse.AssertUpToDate(&NewsCategoryTable.s, new(NewsCategory))
+	parse.AssertUpToDate(&CategoryTable.s, new(Category))
 }
